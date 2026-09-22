@@ -2,7 +2,7 @@
 
 Website-only local marketplace for Abu Hammad, Egypt. Cash on Delivery only.
 
-All four role workflows are implemented; production packaging is being validated. Read [PROJECT_STATUS.md](PROJECT_STATUS.md) before continuing.
+All four role workflows and container packaging are implemented and CI-validated. Read [PROJECT_STATUS.md](PROJECT_STATUS.md) before continuing.
 Original diagrams live in `docs/`; original SQL exercises remain in `DataBase/` as reference only.
 Do not run the legacy seed against the application database: it contains insecure illustrative passwords.
 
