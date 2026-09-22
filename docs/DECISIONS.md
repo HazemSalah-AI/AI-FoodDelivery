@@ -19,3 +19,10 @@
 
 - User explicitly requires all development/checkpoints directly on `main`; no feature branches or pull requests. Remote `main` was absent, so it was created from existing baseline `83648e8`, preserving history. The local branch was renamed to `main`.
 - GitHub connector branch creation now succeeds. Use authenticated GitHub operations for checkpoints if local Git transport has no write credential. Never force push; verify each remote tree and branch after publishing.
+
+## 2026-09-22 — operational browser experience
+
+- Role-specific Arabic RTL screens call the same authorized APIs as the integration tests. Drivers explicitly enable location sharing in their browser; sharing stops when the app closes. Heartbeats run while the page is visible. Availability expires after 30 minutes without activity.
+- Only the admin screen retrieves driver coordinates. Its map embeds OpenStreetMap for the selected driver's last reported location, with the timestamp shown. No location is synthesized. OpenStreetMap receives the selected coordinates to render the map; no paid map service or API key is used.
+- Driver rejection releases an assignment; the admin chooses another available driver. Driver acceptance is separate from pickup and cash collection/delivery confirmation.
+- Dashboards display lifetime counts and delivered COD totals; these totals are not driver earnings. The delivery fee remains zero per the earlier MVP decision.

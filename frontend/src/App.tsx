@@ -1,3 +1,5 @@
+import { DriverControls } from "./pages/Driver";
+import { UsersPage, Drivers, Places } from "./pages/Admin";
 import { Dashboard } from "./pages/Dashboard";
 import { Products, Business } from "./pages/Merchant";
 import { useEffect, useState } from "react";
@@ -141,11 +143,15 @@ export default function App() {
   )
     content = <Products user={user} />;
   if (user?.role === "Merchant" && tab === "business") content = <Business />;
+  if (user?.role === "Admin" && tab === "users")
+    content = <UsersPage current={user} />;
+  if (user?.role === "Admin" && tab === "drivers") content = <Drivers />;
+  if (user?.role === "Admin" && tab === "places") content = <Places />;
   if (!content)
     content = (
       <div className="panel">
-        <h1>نظرة عامة</h1>
-        <p>انتقل إلى الطلبات لمتابعة وإدارة سير العمل.</p>
+        <h1>الصفحة غير متاحة</h1>
+        <p>اختار صفحة من القائمة للمتابعة.</p>
         <button className="primary" onClick={() => navigate("orders")}>
           عرض الطلبات
         </button>
@@ -304,6 +310,7 @@ export default function App() {
               <button onClick={() => location.reload()}>إعادة المحاولة</button>
             </div>
           )}
+          {user?.role === "Driver" && <DriverControls />}
           {content}
         </main>
         <footer>

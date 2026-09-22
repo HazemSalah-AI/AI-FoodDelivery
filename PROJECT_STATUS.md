@@ -1,22 +1,22 @@
 # Project Status
 
 ## Current Phase
-Phase 10 — customer and merchant experiences completed; driver/admin management screens next.
+Phase 10 complete — all four role experiences validated. Final production preparation next.
 
 ## Completed Phases
-Backend phases 1–8 complete. Customer UI includes Arabic RTL responsive catalog/search/filter/sort, merchant browsing/favorites/reviews, authentication, cart/checkout, address management/geolocation, order history/tracking/cancellation, notifications and profile. Shared operational order actions present; role management/dashboard pages remain.
+Backend phases 1–8 complete. Customer, merchant, driver and admin Arabic RTL interfaces complete, including operational dashboards, account/catalog/area management, assignment/reassignment and admin-only driver location.
 
 ## Current Implementation State
-Customer UI uses real backend APIs and HttpOnly cookie/CSRF sessions. All backend flows implemented. Operational management screens and final deployment docs remain.
+All four roles use actual backend APIs. Browser delivery flow validated through rejection, reassignment, delivery and review. Production deployment preparation remains.
 
 ## Last Completed Task
-Implemented live role dashboards, merchant product add/edit/availability, category add/edit and business open/close profile. Admin-only merchant listing exposes unapproved businesses for management without changing public visibility.
+Added driver availability/heartbeat/explicit location sharing, admin account creation and suspension, merchant approval, driver map and delivery areas.
 
 ## Next Task
-Implement driver availability/heartbeat/location sharing and admin users/drivers/map/city/area management. Run complete four-role browser delivery journey and finalize deployment preparation.
+Prepare production Docker/reverse proxy configuration, expand CI to browser/container checks, finalize README/API/deployment/handoff documentation.
 
 ## Pending Tasks
-Operational role screens and browser tests; production Docker/reverse proxy preparation; final README/API export/deployment/handoff documentation. No paid deployment authorized.
+Production packaging; final README/API/deployment documentation and expanded CI. No paid deployment authorized.
 
 ## Known Issues
 Local Git transport has no credential; authorized GitHub connector publishes reviewed commits with non-forced ref updates. Local native PostgreSQL installation/start is unavailable due environment OS restrictions; validate PostgreSQL via CI service. Legacy SQL seed remains reference only.
@@ -28,7 +28,7 @@ See docs/DECISIONS.md. Unified auth identity, separate assignments, one-merchant
 Revision 342305e2a522 verified locally on SQLite and online on PostgreSQL 17 in GitHub Actions. No schema drift.
 
 ## Tests Status
-Customer and merchant browser tests both passed (2 Chromium tests), including checkout/cancel, mobile overflow, product creation/hide/show and business open/close. TypeScript/Vite build passes; catalog authorization tests and Ruff pass. Backend 23 local tests plus 3 PostgreSQL concurrency tests already verified in remote CI.
+4 Chromium browser tests passed: customer checkout/cancel/mobile, merchant management, admin account/area management, full four-role delivery/reassignment/location privacy/review. Backend 23 passed locally; 3 PostgreSQL-only concurrency tests skipped locally and passed in prior CI. TypeScript/Vite build and Ruff pass. Admin map layout reviewed; external map rendering depends on OpenStreetMap network access.
 
 ## Environment / Setup Notes
 Python 3.12 virtualenv .venv and Node 24 available. Run scripts/setup_env.py once (does not overwrite an existing .env); Docker Compose supplies PostgreSQL 17 on host port 5433. Never print/commit .env.
@@ -37,7 +37,7 @@ Python 3.12 virtualenv .venv and Node 24 available. Run scripts/setup_env.py onc
 All work on main. Audit b12de60 is remote. Checkpoint commits are created through GitHub Git data API because local push transport lacks credentials; local and remote trees are compared before local ref synchronization. No feature branches or PRs.
 
 ## Last Stable Commit
-80530278348ba2e5e2b30e806dc161432e46a95b (customer UI); use git log for merchant UI checkpoint.
+3cccabdcba8fa3ee29ab681b5360ebce0e055832 (merchant dashboard and management).
 
 ## How to Continue in a New Session
 Read README, this file and docs/DECISIONS.md; inspect git status, branches and recent log; pull --ff-only
