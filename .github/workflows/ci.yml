@@ -1,0 +1,42 @@
+name: Validate delivery MVP
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: delivery
+          POSTGRES_DB: delivery_test
+          POSTGRES_HOST_AUTH_METHOD: trust
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U delivery -d delivery_test"
+          --health-interval 5s --health-timeout 3s --health-retries 10
+    env:
+      # This isolated CI service contains disposable test data only.
+      DATABASE_URL: postgresql+psycopg://delivery@localhost:5432/delivery_test
+      TEST_DATABASE_URL: postgresql+psycopg://delivery@localhost:5432/delivery_test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - name: Generate ephemeral signing key
+        run: python -c 'import os,secrets; open(os.environ["GITHUB_ENV"],"a").write("JWT_SECRET="+secrets.token_hex(48)+"\n")'
+      - run: pip install -r backend/requirements-dev.txt
+      - run: ruff check . && ruff format --check . && alembic upgrade head && alembic check && pytest -q
+        working-directory: backend
+      - run: npm ci && npm run build
+        working-directory: frontend
