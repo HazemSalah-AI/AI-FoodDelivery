@@ -4,7 +4,7 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt && useradd --create-home --uid 10001 delivery
 COPY --chown=delivery:delivery app ./app
-COPY --chown=delivery:delivery alembic ./alembic
+COPY --chown=delivery:delivery migrations ./migrations
 COPY --chown=delivery:delivery alembic.ini .
 USER delivery
 EXPOSE 8000

@@ -2,7 +2,7 @@
 !requirements.txt
 !app/
 !app/**
-!alembic/
-!alembic/**
+!migrations/
+!migrations/**
 !alembic.ini
 **/__pycache__
