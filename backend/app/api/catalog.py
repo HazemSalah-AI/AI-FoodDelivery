@@ -248,3 +248,8 @@ def merchant_status(identity: int, data: MerchantStatus, user: Admin, db: DB):
     )
     db.flush()
     return value
+
+
+@router.get("/admin/merchants", response_model=Page[MerchantOut])
+def managed_merchants(user: Admin, db: DB, page_number: PageNumber = 1, page_size: PageSize = 30):
+    return page(db, select(Merchant).order_by(Merchant.business_name), page_number, page_size)

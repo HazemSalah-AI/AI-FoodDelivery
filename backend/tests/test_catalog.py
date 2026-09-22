@@ -44,6 +44,7 @@ def test_admin_creation_role_separation_and_activation(client):
     for identity in (2, 3, 4):
         sign_in(client, identity)
         assert client.get("/api/v1/admin/users").status_code == 403
+        assert client.get("/api/v1/admin/merchants").status_code == 403
     sign_in(client, 1)
     response = client.post(
         "/api/v1/admin/users",

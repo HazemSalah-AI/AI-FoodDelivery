@@ -29,6 +29,7 @@ are generated from the same Pydantic contracts used at runtime. The table is the
 | GET /admin/users | Admin | role, q, pagination | Page[User] | Allowlisted role |
 | POST /admin/users | Admin | registration fields + role; business_name for Merchant | User (201) | Driver/Merchant/Customer; no public admin creation |
 | PATCH /admin/users/{id} | Admin | is_active | User | Cannot suspend self; audit entry |
+| GET /admin/merchants | Admin | pagination | Page[Merchant] | Includes unapproved businesses for management |
 | PATCH /admin/merchants/{id} | Admin | status | Merchant | Pending/Approved/Rejected |
 
 ## Catalog and addresses

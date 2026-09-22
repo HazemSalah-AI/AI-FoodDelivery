@@ -1,7 +1,7 @@
 # Project Status
 
 ## Current Phase
-Phase 10 — integrated customer web experience completed; merchant/driver/admin dashboards next.
+Phase 10 — customer and merchant experiences completed; driver/admin management screens next.
 
 ## Completed Phases
 Backend phases 1–8 complete. Customer UI includes Arabic RTL responsive catalog/search/filter/sort, merchant browsing/favorites/reviews, authentication, cart/checkout, address management/geolocation, order history/tracking/cancellation, notifications and profile. Shared operational order actions present; role management/dashboard pages remain.
@@ -10,10 +10,10 @@ Backend phases 1–8 complete. Customer UI includes Arabic RTL responsive catalo
 Customer UI uses real backend APIs and HttpOnly cookie/CSRF sessions. All backend flows implemented. Operational management screens and final deployment docs remain.
 
 ## Last Completed Task
-Recovered unfinished UI from nested local folder, fixed compilation, formatted source, and ran real Chromium login/checkout/pending cancellation plus mobile navigation/overflow test.
+Implemented live role dashboards, merchant product add/edit/availability, category add/edit and business open/close profile. Admin-only merchant listing exposes unapproved businesses for management without changing public visibility.
 
 ## Next Task
-Implement merchant products/profile/dashboard, driver availability/location/dashboard, admin users/drivers/map/cities/dashboard; run four-role browser workflow; finalize packaging and CI browser tests.
+Implement driver availability/heartbeat/location sharing and admin users/drivers/map/city/area management. Run complete four-role browser delivery journey and finalize deployment preparation.
 
 ## Pending Tasks
 Operational role screens and browser tests; production Docker/reverse proxy preparation; final README/API export/deployment/handoff documentation. No paid deployment authorized.
@@ -28,7 +28,7 @@ See docs/DECISIONS.md. Unified auth identity, separate assignments, one-merchant
 Revision 342305e2a522 verified locally on SQLite and online on PostgreSQL 17 in GitHub Actions. No schema drift.
 
 ## Tests Status
-23 backend tests passed locally; 3 PostgreSQL-only tests skipped locally. Remote d9de95b CI succeeded including PostgreSQL concurrency tests. TypeScript/Vite build passed. Real Chromium customer checkout/cancellation/mobile test passed (1 test). Standard browser download failed locally; packaged Chromium used via E2E_CHROMIUM_EXECUTABLE.
+Customer and merchant browser tests both passed (2 Chromium tests), including checkout/cancel, mobile overflow, product creation/hide/show and business open/close. TypeScript/Vite build passes; catalog authorization tests and Ruff pass. Backend 23 local tests plus 3 PostgreSQL concurrency tests already verified in remote CI.
 
 ## Environment / Setup Notes
 Python 3.12 virtualenv .venv and Node 24 available. Run scripts/setup_env.py once (does not overwrite an existing .env); Docker Compose supplies PostgreSQL 17 on host port 5433. Never print/commit .env.
@@ -37,7 +37,7 @@ Python 3.12 virtualenv .venv and Node 24 available. Run scripts/setup_env.py onc
 All work on main. Audit b12de60 is remote. Checkpoint commits are created through GitHub Git data API because local push transport lacks credentials; local and remote trees are compared before local ref synchronization. No feature branches or PRs.
 
 ## Last Stable Commit
-d9de95b6c8e5c7e6fa330da557b1f8ff5fa1824e (backend delivery); use git log for customer UI checkpoint.
+80530278348ba2e5e2b30e806dc161432e46a95b (customer UI); use git log for merchant UI checkpoint.
 
 ## How to Continue in a New Session
 Read README, this file and docs/DECISIONS.md; inspect git status, branches and recent log; pull --ff-only

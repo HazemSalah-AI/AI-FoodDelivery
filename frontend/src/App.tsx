@@ -1,3 +1,5 @@
+import { Dashboard } from "./pages/Dashboard";
+import { Products, Business } from "./pages/Merchant";
 import { useEffect, useState } from "react";
 import {
   Bell,
@@ -130,7 +132,15 @@ export default function App() {
   if (user && tab === "notifications") content = <Notifications />;
   if (user && tab === "profile")
     content = <Profile user={user} onUser={setUser} />;
-  // Role dashboard modules are integrated at their own checkpoint.
+  if (user && user.role !== "Customer" && tab === "dashboard")
+    content = <Dashboard user={user} navigate={navigate} />;
+  if (
+    user &&
+    (user.role === "Merchant" || user.role === "Admin") &&
+    tab === "products"
+  )
+    content = <Products user={user} />;
+  if (user?.role === "Merchant" && tab === "business") content = <Business />;
   if (!content)
     content = (
       <div className="panel">
