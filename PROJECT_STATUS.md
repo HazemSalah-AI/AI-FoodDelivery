@@ -1,50 +1,43 @@
 # Project Status
 
 ## Current Phase
-Phase 1 — repository re-audited; publishing the audit checkpoint on main before foundation.
+Phase 2 — executable foundation completed; database implementation next.
 
 ## Completed Phases
-Initial audit prepared; checkpoint publication is being revalidated on main.
-Audit work: all SQL, repository branches/history and supplied ERD/DFD/use-case diagrams reviewed.
+Phase 1 audit published to main as b12de60. Phase 2 adds bootable FastAPI and React/TypeScript/Vite, typed configuration, secure environment generator, database session foundation and PostgreSQL Compose service.
 
 ## Current Implementation State
-Requirements and database exercises only. No working backend/frontend at baseline.
+Backend health and OpenAPI work; frontend builds. Business endpoints and migrations not implemented yet.
 
 ## Last Completed Task
-Preserved original documentation and recorded schema/workflow contradictions and decisions.
+Validated app boot, configuration rejection and frontend production build.
 
 ## Next Task
-Publish the audit to main, then create executable FastAPI/React foundation and configuration; validate boot.
+Implement relational models and explicit Alembic migrations, then publish API design and authentication.
 
 ## Pending Tasks
 Phases 2–11: foundation, migrations, API, architecture, security, domains, tests, UI, deployment preparation.
 
 ## Known Issues
-- Git push failed: could not read Username for https://github.com (no local write credential).
-- Previous turn: create_tree returned HTTP 403. This turn: GitHub connector successfully created main from baseline; content publication is next.
-- No force push or access-control changes attempted.
-- Legacy SQL seed contains plaintext illustrative passwords and inconsistent status strings; never use as app seed.
+Local Git transport has no credential; authorized GitHub connector publishes reviewed commits with non-forced ref updates. Local native PostgreSQL installation/start is unavailable due environment OS restrictions; validate PostgreSQL via CI service. Legacy SQL seed remains reference only.
 
 ## Important Architecture Decisions
 See docs/DECISIONS.md. Unified auth identity, separate assignments, one-merchant cart, canonical state machine.
 
 ## Database / Migration Status
-Original standalone SQL only; new application requires a fresh database and Alembic migrations.
+Session management and SQLite foreign-key enforcement implemented; migration schema is next.
 
 ## Tests Status
-No executable app tests existed or were claimed to pass. Audit checked tracked file list, branches, history and full SQL content; git diff --check passes.
+2 backend tests passed; Ruff check and format passed; TypeScript and Vite production build passed. TestClient upstream deprecation warnings are informational.
 
 ## Environment / Setup Notes
-Python and Node available. Docker/PostgreSQL binaries not initially available in this environment.
+Python 3.12 virtualenv .venv and Node 24 available. Run scripts/setup_env.py once (does not overwrite an existing .env); Docker Compose supplies PostgreSQL 17 on host port 5433. Never print/commit .env.
 
 ## Git / Branch Status
-main; origin HazemSalah-AI/AI-FoodDelivery. main was created from existing baseline 83648e8 on explicit user instruction.
-Local audit commits: 60c1fe3 (documentation rename), 5909d5e (audit documents), 0148b1e (previous blocker). Publishing their combined reviewed changes to main.
-Checkpoint after every stable phase. Never force push.
+All work on main. Audit b12de60 is remote. Checkpoint commits are created through GitHub Git data API because local push transport lacks credentials; local and remote trees are compared before local ref synchronization. No feature branches or PRs.
 
 ## Last Stable Commit
-Remote baseline: 83648e8986a999d02ecd81808198291a4063ec15.
-Local audit documentation: 5909d5e. Use git log for the latest status checkpoint.
+b12de600b151db2dd94cb57121530e53e51c1f28 (audit); use git log for the foundation checkpoint.
 
 ## How to Continue in a New Session
 Read README, this file and docs/DECISIONS.md; inspect git status, branches and recent log; pull --ff-only
