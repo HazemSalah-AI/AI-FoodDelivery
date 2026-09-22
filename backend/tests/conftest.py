@@ -3,7 +3,7 @@ import secrets
 
 import pytest
 from fastapi.testclient import TestClient
-from sqlalchemy import inspect
+from sqlalchemy import inspect, text
 from sqlalchemy.engine import make_url
 
 from app.core.config import Settings
@@ -64,6 +64,14 @@ def app(tmp_path):
                 City(id=1, name="أبو حماد"),
             ]
         )
+    if engine.dialect.name == "postgresql":
+        with engine.begin() as connection:
+            connection.execute(
+                text("SELECT setval(pg_get_serial_sequence('users', 'id'), 7, true)")
+            )
+            connection.execute(
+                text("SELECT setval(pg_get_serial_sequence('cities', 'id'), 1, true)")
+            )
     yield app
     engine.dispose()
 

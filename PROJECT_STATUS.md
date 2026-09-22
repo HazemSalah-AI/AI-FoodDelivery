@@ -1,19 +1,19 @@
 # Project Status
 
 ## Current Phase
-Phase 6 / 7.1 — authentication and authorization foundation implemented; catalog and account-management domains next.
+Phase 7.2–7.5 — account management, catalog and addresses completed; cart/checkout next.
 
 ## Completed Phases
 Audit, executable foundation, relational schema/migrations, API design/architecture; JWT sessions, Argon2, CSRF, origin checks, account activation checks, role dependencies, registration/login/logout/profile, explicit admin bootstrap.
 
 ## Current Implementation State
-Working authenticated API and revocable sessions. Catalog and order domain routes are next; frontend still foundation only.
+Identity, catalog, account management and address APIs implemented. Order workflows, role UIs and final deployment packaging remain.
 
 ## Last Completed Task
-Implemented security and validated registration, duplicate handling, logout replay rejection, CSRF/origin checks, public-role rejection, suspended sessions and auth throttling.
+Implemented role-protected admin user creation/activation, merchant profile/approval, category/product management, search/filter/sort/pagination, cities/areas and owned address CRUD with archive/default rules.
 
 ## Next Task
-Implement admin account management, merchant catalog/profile, cities/areas, addresses and public browsing with ownership tests.
+Implement transactional server cart, checkout repricing/stock reservation/idempotency, order history and merchant/customer transitions.
 
 ## Pending Tasks
 Phases 2–11: foundation, migrations, API, architecture, security, domains, tests, UI, deployment preparation.
@@ -28,7 +28,7 @@ See docs/DECISIONS.md. Unified auth identity, separate assignments, one-merchant
 Revision 342305e2a522 verified locally on SQLite and online on PostgreSQL 17 in GitHub Actions. No schema drift.
 
 ## Tests Status
-10 backend tests passed; Ruff passes. GitHub Actions on schema and API-design commits succeeded, including online PostgreSQL 17 migration upgrade/check and frontend build.
+14 backend tests passed; Ruff check/format pass. Tests cover catalog cross-owner denial, categories, active merchant visibility, admin roles, duplicate accounts, address defaults/ownership/archive and field/query validation. PostgreSQL fixture sequences explicitly synchronized after deterministic test seeding.
 
 ## Environment / Setup Notes
 Python 3.12 virtualenv .venv and Node 24 available. Run scripts/setup_env.py once (does not overwrite an existing .env); Docker Compose supplies PostgreSQL 17 on host port 5433. Never print/commit .env.
@@ -37,7 +37,7 @@ Python 3.12 virtualenv .venv and Node 24 available. Run scripts/setup_env.py onc
 All work on main. Audit b12de60 is remote. Checkpoint commits are created through GitHub Git data API because local push transport lacks credentials; local and remote trees are compared before local ref synchronization. No feature branches or PRs.
 
 ## Last Stable Commit
-4f05c86868c9a60d4ec6a86f5d9973297b4c1e5c (API contracts); use git log for security checkpoint.
+9352715a8a9a112076aea9f83a1fafa05c6d0b8c (authentication); use git log for catalog checkpoint.
 
 ## How to Continue in a New Session
 Read README, this file and docs/DECISIONS.md; inspect git status, branches and recent log; pull --ff-only

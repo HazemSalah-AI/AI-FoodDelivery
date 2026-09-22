@@ -77,4 +77,7 @@ def create_app(settings: Settings | None = None):
 
     app.state.auth_limiter = AuthLimiter()
     app.include_router(auth_router, prefix="/api/v1")
+    from app.api.catalog import router as catalog_router
+
+    app.include_router(catalog_router, prefix="/api/v1")
     return app
