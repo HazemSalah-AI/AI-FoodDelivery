@@ -26,3 +26,10 @@
 - Only the admin screen retrieves driver coordinates. Its map embeds OpenStreetMap for the selected driver's last reported location, with the timestamp shown. No location is synthesized. OpenStreetMap receives the selected coordinates to render the map; no paid map service or API key is used.
 - Driver rejection releases an assignment; the admin chooses another available driver. Driver acceptance is separate from pickup and cash collection/delivery confirmation.
 - Dashboards display lifetime counts and delivered COD totals; these totals are not driver earnings. The delivery fee remains zero per the earlier MVP decision.
+
+## 2026-09-22 — deployment checkpoint and branch instruction
+
+- Latest user instruction supersedes the earlier main-only instruction: work on the existing default branch. GitHub reports `master`. Fast-forward master through the tested main history, then publish this checkpoint there without deleting main or rewriting history.
+- Production uses private PostgreSQL/backend/frontend containers and a Caddy HTTPS edge; development retains PostgreSQL-only mode and adds an opt-in full app profile. Migrations run explicitly before API startup. Both app images run as non-root users.
+- API responses disable caching of session/order/location data. Readiness verifies database connectivity and a nonempty migration revision; liveness remains independent. Session expiry returns the browser to login, and proxy errors receive a readable fallback.
+- Container builds and runtime checks run in GitHub Actions because Docker is not available in this workspace. No live deployment, DNS changes or paid resources are part of this checkpoint.

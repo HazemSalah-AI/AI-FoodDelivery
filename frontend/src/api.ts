@@ -51,9 +51,11 @@ export async function api<T>(
     throw new Error("تعذّر الاتصال. تأكد أن الخادم يعمل وحاول مرة أخرى.");
   }
   if (response.status === 204) return undefined as T;
-  const data = await response.json();
+  const data = await response.json().catch(() => null);
+  if (response.status === 401 && path !== "/auth/login" && path !== "/auth/me")
+    window.dispatchEvent(new Event("delivery-session-expired"));
   if (!response.ok) {
-    const error = data.error;
+    const error = data?.error;
     throw new ApiError(
       response.status,
       messages[error?.code] ??
@@ -65,7 +67,10 @@ export async function api<T>(
                   x.field.replace("body.", "") + ": " + x.message,
               )
               .join("، ")
-          : (error?.message ?? "تعذّر إتمام العملية.")),
+          : (error?.message ??
+            (response.status === 429
+              ? messages.rate_limited
+              : "تعذّر إتمام العملية."))),
     );
   }
   return data as T;

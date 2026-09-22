@@ -5,7 +5,8 @@ from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from sqlalchemy.exc import IntegrityError
+from sqlalchemy import text
+from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 
 from app.core.config import Settings
 from app.core.errors import DomainError
@@ -34,6 +35,14 @@ def create_app(settings: Settings | None = None):
         allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE"],
         allow_headers=["Content-Type", "X-CSRF-Token"],
     )
+
+    @app.middleware("http")
+    async def private_responses(request: Request, call_next):
+        response = await call_next(request)
+        if request.url.path.startswith("/api/"):
+            response.headers["Cache-Control"] = "no-store"
+            response.headers["X-Content-Type-Options"] = "nosniff"
+        return response
 
     @app.exception_handler(DomainError)
     async def domain_error(request: Request, exc: DomainError):
@@ -71,6 +80,19 @@ def create_app(settings: Settings | None = None):
     @app.get("/api/v1/health", tags=["Health"])
     def health():
         return {"status": "ok"}
+
+    @app.get("/api/v1/ready", tags=["Health"])
+    def ready():
+        try:
+            with engine.connect() as connection:
+                revision = connection.execute(
+                    text("SELECT version_num FROM alembic_version LIMIT 1")
+                ).scalar()
+            if not revision:
+                return JSONResponse(status_code=503, content={"status": "unavailable"})
+        except SQLAlchemyError:
+            return JSONResponse(status_code=503, content={"status": "unavailable"})
+        return {"status": "ready"}
 
     from app.api.auth import router as auth_router
     from app.security.limiter import AuthLimiter

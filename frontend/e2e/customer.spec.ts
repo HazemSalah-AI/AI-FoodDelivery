@@ -43,4 +43,8 @@ test("customer can sign in, browse, checkout and cancel pending order", async ({
       () => document.documentElement.scrollWidth <= window.innerWidth,
     ),
   ).toBeTruthy();
+  await page.context().clearCookies();
+  await page.getByRole("button", { name: "فتح القائمة" }).click();
+  await page.getByRole("button", { name: /سلة المشتريات/ }).click();
+  await expect(page.getByLabel("كلمة المرور")).toBeVisible();
 });

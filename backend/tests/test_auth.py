@@ -21,7 +21,10 @@ def test_registration_login_logout_revocation(client, app):
         ).password_hash.startswith("$argon2id$")
     sign_in(client, 4)
     token = client.cookies.get("delivery_session")
-    assert client.get("/api/v1/auth/me").status_code == 200
+    me = client.get("/api/v1/auth/me")
+    assert me.status_code == 200
+    assert me.headers["Cache-Control"] == "no-store"
+    assert me.headers["X-Content-Type-Options"] == "nosniff"
     assert client.post("/api/v1/auth/logout").status_code == 204
     client.cookies.set("delivery_session", token, path="/api/v1")
     assert client.get("/api/v1/auth/me").status_code == 401

@@ -1,7 +1,7 @@
 name: Validate delivery MVP
 on:
   push:
-    branches: [main]
+    branches: [main, master]
   workflow_dispatch:
 permissions:
   contents: read
@@ -40,3 +40,27 @@ jobs:
         working-directory: backend
       - run: npm ci && npm run build
         working-directory: frontend
+      - run: npx playwright install --with-deps chromium
+        working-directory: frontend
+      - run: python scripts/run_e2e.py
+  containers:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Create disposable environment
+        run: python scripts/setup_env.py
+      - name: Validate production configuration
+        env:
+          DOMAIN: delivery.example.com
+        run: docker compose -f docker-compose.prod.yml config --quiet
+      - name: Build and boot migrated application
+        run: docker compose --profile app up --build --wait --wait-timeout 180
+      - name: Check proxy and application readiness
+        run: |
+          curl --fail --retry 5 --retry-delay 2 --retry-all-errors http://localhost:8080/api/v1/ready
+          curl --fail http://localhost:8080/ | grep 'id="root"'
+          docker compose exec -T frontend nginx -t
+          docker run --rm -e DOMAIN=delivery.example.com -v "$PWD/deploy/Caddyfile:/etc/caddy/Caddyfile:ro" caddy:2-alpine caddy validate --config /etc/caddy/Caddyfile
+      - name: Stop disposable stack
+        if: always()
+        run: docker compose --profile app down --volumes

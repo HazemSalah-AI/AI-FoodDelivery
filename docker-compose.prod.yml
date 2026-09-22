@@ -1,0 +1,62 @@
+# Standalone production stack; do not merge with the development compose file.
+services:
+  db:
+    image: postgres:17
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: delivery
+      POSTGRES_DB: delivery
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set production database password}
+    volumes: [pgdata:/var/lib/postgresql/data]
+    healthcheck:
+      test: [CMD-SHELL, "pg_isready -U delivery -d delivery"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+  migrate:
+    build: ./backend
+    environment: &app_environment
+      ENVIRONMENT: production
+      DATABASE_URL: postgresql+psycopg://delivery:${POSTGRES_PASSWORD:?Set production database password}@db:5432/delivery
+      JWT_SECRET: ${JWT_SECRET:?Set production signing key}
+      SECURE_COOKIES: "true"
+      ALLOWED_ORIGINS: '["https://${DOMAIN:?Set your domain}"]'
+    command: [alembic, upgrade, head]
+    depends_on:
+      db:
+        condition: service_healthy
+  backend:
+    build: ./backend
+    restart: unless-stopped
+    environment:
+      <<: *app_environment
+      FORWARDED_ALLOW_IPS: "*"
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    healthcheck:
+      test: [CMD, python, -c, "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/v1/ready', timeout=3)"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+  frontend:
+    build: ./frontend
+    restart: unless-stopped
+    depends_on:
+      backend:
+        condition: service_healthy
+  edge:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    environment:
+      DOMAIN: ${DOMAIN:?Set your domain}
+    ports: ["80:80", "443:443"]
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on: [frontend]
+volumes:
+  pgdata:
+  caddy_data:
+  caddy_config:

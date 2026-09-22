@@ -50,13 +50,21 @@ export default function App() {
   useEffect(() => {
     const handler = () => setPath(location.hash.slice(2) || "browse");
     window.addEventListener("hashchange", handler);
+    const expired = () => {
+      setUser(null);
+      navigate("login");
+    };
+    window.addEventListener("delivery-session-expired", expired);
     void api<User>("/auth/me")
       .then(setUser)
       .catch((e) => {
         if (e.status !== 401) setSessionError(e.message);
       })
       .finally(() => setLoading(false));
-    return () => window.removeEventListener("hashchange", handler);
+    return () => {
+      window.removeEventListener("hashchange", handler);
+      window.removeEventListener("delivery-session-expired", expired);
+    };
   }, []);
   useEffect(() => {
     if (user && user.role !== "Customer" && path === "browse")

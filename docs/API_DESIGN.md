@@ -63,12 +63,13 @@ are generated from the same Pydantic contracts used at runtime. The table is the
 | PUT /cart/items/{product_id} | Customer | quantity | Cart | 1–99; one merchant; available stock |
 | DELETE /cart/items/{product_id} | Customer | — | 204 | Own cart |
 | POST /checkout | Customer | address_id, idempotency_key | Order (201) | Atomic; own address; lock/reprice/reserve stock; Cash only |
-| GET /orders | Signed in | status?, pagination | Page[Order] | Customer own, Merchant own, Driver active assignment only, Admin all |
+| GET /orders | Signed in | status?, pagination | Page[Order] | Customer own, Merchant own, Driver Pending/Accepted/Completed assignments, Admin all |
 | GET /orders/{id} | Signed in | — | Order + items/history/assignment | Same ownership; no driver coordinates |
 | POST /orders/{id}/transition | Role/owner | status, reason? | Order | Only documented transition edges; rejection reason required |
 | POST /orders/{id}/assignments | Admin | driver_id | Assignment (201) | Ready; active/available/fresh driver; no active conflict |
 | GET /assignments | Driver/Admin | pagination | Page[Assignment] | Driver sees only own history |
 | POST /assignments/{id}/respond | Assigned Driver | accept: boolean, reason? | Assignment | Pending only; rejection releases order for reassignment |
+| GET /driver/availability | Driver | — | availability info | Own availability only |
 | PUT /driver/availability | Driver | is_available | availability info | Availability requires heartbeat within 30 min |
 | POST /driver/heartbeat | Driver | — | availability info | Updates last_seen only |
 | PUT /driver/location | Driver | latitude, longitude | updated_at | Store paired coordinates; no readback to other roles |
@@ -92,3 +93,7 @@ operational transitions but cannot bypass pickup requiring an accepted assignmen
 | GET /favorites | Customer | pagination | Page[Merchant] | Own favorites |
 | PUT /favorites/{merchant_id} | Customer | — | 204 | Existing public merchant; idempotent |
 | DELETE /favorites/{merchant_id} | Customer | — | 204 | Own favorite; idempotent |
+
+Health checks: `GET /health` reports process liveness; `GET /ready` checks database access and a
+nonempty Alembic revision, returning 503 without database details when unavailable. All `/api/`
+responses set `Cache-Control: no-store`. Deployment still runs `alembic upgrade head` explicitly.

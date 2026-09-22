@@ -1,22 +1,22 @@
 # Project Status
 
 ## Current Phase
-Phase 10 complete — all four role experiences validated. Final production preparation next.
+Phase 11 — production packaging checkpoint implemented; remote container validation follows this push.
 
 ## Completed Phases
 Backend phases 1–8 complete. Customer, merchant, driver and admin Arabic RTL interfaces complete, including operational dashboards, account/catalog/area management, assignment/reassignment and admin-only driver location.
 
 ## Current Implementation State
-All four roles use actual backend APIs. Browser delivery flow validated through rejection, reassignment, delivery and review. Production deployment preparation remains.
+All four role workflows remain implemented. Container packaging and CI are ready; no live deployment or paid infrastructure created. Local backend/browser/build checks pass. Remote Docker runtime validation is pending the checkpoint push.
 
 ## Last Completed Task
-Added driver availability/heartbeat/explicit location sharing, admin account creation and suspension, merchant approval, driver map and delivery areas.
+Added non-root backend/frontend Docker images, opt-in local app stack, production Caddy HTTPS/Nginx stack, explicit migration startup and readiness endpoint. Added no-store API responses, browser session-expiry recovery, deployment/backup instructions, browser and container CI jobs.
 
 ## Next Task
-Prepare production Docker/reverse proxy configuration, expand CI to browser/container checks, finalize README/API/deployment/handoff documentation.
+Verify the packaging checkpoint CI results and fix any failures within this checkpoint. Next development checkpoint: finish the API import/export artifact and concise final acceptance/handoff documentation. Do not restart completed implementation.
 
 ## Pending Tasks
-Production packaging; final README/API/deployment documentation and expanded CI. No paid deployment authorized.
+Remote container CI confirmation; API import/export artifact and final acceptance/handoff review. No live deployment authorized.
 
 ## Known Issues
 Local Git transport has no credential; authorized GitHub connector publishes reviewed commits with non-forced ref updates. Local native PostgreSQL installation/start is unavailable due environment OS restrictions; validate PostgreSQL via CI service. Legacy SQL seed remains reference only.
@@ -28,18 +28,16 @@ See docs/DECISIONS.md. Unified auth identity, separate assignments, one-merchant
 Revision 342305e2a522 verified locally on SQLite and online on PostgreSQL 17 in GitHub Actions. No schema drift.
 
 ## Tests Status
-4 Chromium browser tests passed: customer checkout/cancel/mobile, merchant management, admin account/area management, full four-role delivery/reassignment/location privacy/review. Backend 23 passed locally; 3 PostgreSQL-only concurrency tests skipped locally and passed in prior CI. TypeScript/Vite build and Ruff pass. Admin map layout reviewed; external map rendering depends on OpenStreetMap network access.
+23 backend tests passed locally; 3 PostgreSQL-only tests skipped locally (run by CI). Migration upgrade/check/downgrade now verifies readiness; auth test verifies private no-store headers. All 4 Chromium browser journeys passed including expired-session recovery. TypeScript/Vite build, Ruff and YAML parsing passed. Docker is absent locally; new CI builds both images and boots PostgreSQL/migrations/API/Nginx, validates Caddy and reruns browser tests.
 
 ## Environment / Setup Notes
 Python 3.12 virtualenv .venv and Node 24 available. Run scripts/setup_env.py once (does not overwrite an existing .env); Docker Compose supplies PostgreSQL 17 on host port 5433. Never print/commit .env.
 
 ## Git / Branch Status
-All work on main. Audit b12de60 is remote. Checkpoint commits are created through GitHub Git data API because local push transport lacks credentials; local and remote trees are compared before local ref synchronization. No feature branches or PRs.
+Latest user instruction requires the existing default branch. GitHub reports master. Local master was fast-forwarded through all tested main commits; this checkpoint is published to master without force push. main remains preserved. Connector publishes Git data commits because local Git has no write credentials.
 
 ## Last Stable Commit
-3cccabdcba8fa3ee29ab681b5360ebce0e055832 (merchant dashboard and management).
+17a3ed8863675b58059fba184bbcc80126ab9a80 — complete four-role UI and browser coverage, before this packaging checkpoint.
 
 ## How to Continue in a New Session
-Read README, this file and docs/DECISIONS.md; inspect git status, branches and recent log; pull --ff-only
-when clean, on main only. Inspect implemented code/migrations/tests before editing. Run checks, update this file,
-review staged diff for secrets, commit and push each completed phase. No paid infrastructure authorized.
+Read this file first and inspect only files relevant to Next Task. Use the current GitHub default branch (master at this checkpoint), inspect git status, and pull --ff-only when clean. Complete one useful tested checkpoint, update this file, review for secrets, commit and push, then stop unless instructed otherwise. No paid infrastructure or live deployment authorized.

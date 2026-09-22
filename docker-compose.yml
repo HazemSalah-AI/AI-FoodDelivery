@@ -14,5 +14,39 @@ services:
       interval: 5s
       timeout: 3s
       retries: 10
+  migrate:
+    build: ./backend
+    profiles: [app]
+    environment: &app_environment
+      ENVIRONMENT: development
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-delivery}:${POSTGRES_PASSWORD:?Run setup_env.py}@db:5432/${POSTGRES_DB:-delivery}
+      JWT_SECRET: ${JWT_SECRET:?Run setup_env.py}
+      SECURE_COOKIES: "false"
+      ALLOWED_ORIGINS: '["http://localhost:8080","http://127.0.0.1:8080"]'
+    command: [alembic, upgrade, head]
+    depends_on:
+      db:
+        condition: service_healthy
+  backend:
+    build: ./backend
+    profiles: [app]
+    environment:
+      <<: *app_environment
+      FORWARDED_ALLOW_IPS: "*"
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    healthcheck:
+      test: [CMD, python, -c, "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/v1/ready', timeout=3)"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+  frontend:
+    build: ./frontend
+    profiles: [app]
+    ports: ["127.0.0.1:8080:8080"]
+    depends_on:
+      backend:
+        condition: service_healthy
 volumes:
   pgdata:
