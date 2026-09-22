@@ -1,22 +1,22 @@
 # Project Status
 
 ## Current Phase
-Phases 7–8 — backend MVP domains implemented and locally validated; PostgreSQL concurrency CI and frontend integration next.
+Phase 10 — integrated customer web experience completed; merchant/driver/admin dashboards next.
 
 ## Completed Phases
-Audit; foundation; schema/migrations; API design; security; all backend domains including assignments/reassignment, delivery, heartbeat/location, notifications, dashboards, merchant reviews and favorites.
+Backend phases 1–8 complete. Customer UI includes Arabic RTL responsive catalog/search/filter/sort, merchant browsing/favorites/reviews, authentication, cart/checkout, address management/geolocation, order history/tracking/cancellation, notifications and profile. Shared operational order actions present; role management/dashboard pages remain.
 
 ## Current Implementation State
-All core role APIs and business transitions work. Role interfaces and production packaging remain. Driver location uses an explicit admin-only response schema; writing location returns only timestamp.
+Customer UI uses real backend APIs and HttpOnly cookie/CSRF sessions. All backend flows implemented. Operational management screens and final deployment docs remain.
 
 ## Last Completed Task
-Verified full assignment rejection/reassignment/acceptance/pickup/delivery flow, COD reporting, notification ownership, merchant reviews, favorites and stale-driver handling. Added three PostgreSQL race tests.
+Recovered unfinished UI from nested local folder, fixed compilation, formatted source, and ran real Chromium login/checkout/pending cancellation plus mobile navigation/overflow test.
 
 ## Next Task
-Validate PostgreSQL CI; build integrated customer screens, then merchant/driver/admin dashboards with browser workflow tests.
+Implement merchant products/profile/dashboard, driver availability/location/dashboard, admin users/drivers/map/cities/dashboard; run four-role browser workflow; finalize packaging and CI browser tests.
 
 ## Pending Tasks
-Phases 2–11: foundation, migrations, API, architecture, security, domains, tests, UI, deployment preparation.
+Operational role screens and browser tests; production Docker/reverse proxy preparation; final README/API export/deployment/handoff documentation. No paid deployment authorized.
 
 ## Known Issues
 Local Git transport has no credential; authorized GitHub connector publishes reviewed commits with non-forced ref updates. Local native PostgreSQL installation/start is unavailable due environment OS restrictions; validate PostgreSQL via CI service. Legacy SQL seed remains reference only.
@@ -28,7 +28,7 @@ See docs/DECISIONS.md. Unified auth identity, separate assignments, one-merchant
 Revision 342305e2a522 verified locally on SQLite and online on PostgreSQL 17 in GitHub Actions. No schema drift.
 
 ## Tests Status
-23 tests passed locally; 3 PostgreSQL concurrency tests skipped locally by explicit environment guard. Ruff passes. Concurrency tests cover accept-vs-cancel, two orders assigned to one driver, and competing checkouts for one unit. PostgreSQL execution must be confirmed in CI before claiming those passed.
+23 backend tests passed locally; 3 PostgreSQL-only tests skipped locally. Remote d9de95b CI succeeded including PostgreSQL concurrency tests. TypeScript/Vite build passed. Real Chromium customer checkout/cancellation/mobile test passed (1 test). Standard browser download failed locally; packaged Chromium used via E2E_CHROMIUM_EXECUTABLE.
 
 ## Environment / Setup Notes
 Python 3.12 virtualenv .venv and Node 24 available. Run scripts/setup_env.py once (does not overwrite an existing .env); Docker Compose supplies PostgreSQL 17 on host port 5433. Never print/commit .env.
@@ -37,7 +37,7 @@ Python 3.12 virtualenv .venv and Node 24 available. Run scripts/setup_env.py onc
 All work on main. Audit b12de60 is remote. Checkpoint commits are created through GitHub Git data API because local push transport lacks credentials; local and remote trees are compared before local ref synchronization. No feature branches or PRs.
 
 ## Last Stable Commit
-99bfcf1f919e27296d0e36d711a0b45738196a41 (checkout); use git log for delivery checkpoint.
+d9de95b6c8e5c7e6fa330da557b1f8ff5fa1824e (backend delivery); use git log for customer UI checkpoint.
 
 ## How to Continue in a New Session
 Read README, this file and docs/DECISIONS.md; inspect git status, branches and recent log; pull --ff-only
