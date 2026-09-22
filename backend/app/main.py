@@ -83,4 +83,7 @@ def create_app(settings: Settings | None = None):
     from app.api.orders import router as orders_router
 
     app.include_router(orders_router, prefix="/api/v1")
+    from app.api.operations import router as operations_router
+
+    app.include_router(operations_router, prefix="/api/v1")
     return app

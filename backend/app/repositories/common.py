@@ -5,7 +5,9 @@ from app.core.errors import DomainError
 
 def get(db, model, identity, *, lock=False):
     stmt = select(model).where(model.id == identity)
-    value = db.scalar(stmt.with_for_update() if lock else stmt)
+    value = db.scalar(
+        stmt.with_for_update().execution_options(populate_existing=True) if lock else stmt
+    )
     if value is None:
         raise DomainError(404, "not_found", "Record not found.")
     return value

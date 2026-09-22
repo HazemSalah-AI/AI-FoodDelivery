@@ -1,19 +1,19 @@
 # Project Status
 
 ## Current Phase
-Phase 7.6–7.9 — transactional cart/checkout and order lifecycle completed; assignment/location/notification APIs next.
+Phases 7–8 — backend MVP domains implemented and locally validated; PostgreSQL concurrency CI and frontend integration next.
 
 ## Completed Phases
-Audit, executable foundation, relational schema/migrations, API design/architecture; JWT sessions, Argon2, CSRF, origin checks, account activation checks, role dependencies, registration/login/logout/profile, explicit admin bootstrap.
+Audit; foundation; schema/migrations; API design; security; all backend domains including assignments/reassignment, delivery, heartbeat/location, notifications, dashboards, merchant reviews and favorites.
 
 ## Current Implementation State
-Functional auth/catalog/cart/checkout/order APIs. Order state transitions are explicit and tested. Assignment and ancillary APIs plus frontend integration remain.
+All core role APIs and business transitions work. Role interfaces and production packaging remain. Driver location uses an explicit admin-only response schema; writing location returns only timestamp.
 
 ## Last Completed Task
-Implemented server-side cart, one-merchant enforcement, current-price checkout, stock reservation, idempotency, address/item snapshots, order privacy/ownership, state-machine transitions, history and transactional notifications.
+Verified full assignment rejection/reassignment/acceptance/pickup/delivery flow, COD reporting, notification ownership, merchant reviews, favorites and stale-driver handling. Added three PostgreSQL race tests.
 
 ## Next Task
-Implement admin assignment, driver acceptance/rejection/delivery/location, notification reads, dashboards, merchant reviews and favorites; add end-to-end backend tests and PostgreSQL concurrency tests.
+Validate PostgreSQL CI; build integrated customer screens, then merchant/driver/admin dashboards with browser workflow tests.
 
 ## Pending Tasks
 Phases 2–11: foundation, migrations, API, architecture, security, domains, tests, UI, deployment preparation.
@@ -28,7 +28,7 @@ See docs/DECISIONS.md. Unified auth identity, separate assignments, one-merchant
 Revision 342305e2a522 verified locally on SQLite and online on PostgreSQL 17 in GitHub Actions. No schema drift.
 
 ## Tests Status
-20 backend tests passed locally; Ruff passes. Latest catalog checkpoint GitHub Actions succeeded on PostgreSQL 17. Checkout tests verify repricing, retry safety, rollback, stock restoration once, address ownership, snapshot preservation and cancellation denial after acceptance.
+23 tests passed locally; 3 PostgreSQL concurrency tests skipped locally by explicit environment guard. Ruff passes. Concurrency tests cover accept-vs-cancel, two orders assigned to one driver, and competing checkouts for one unit. PostgreSQL execution must be confirmed in CI before claiming those passed.
 
 ## Environment / Setup Notes
 Python 3.12 virtualenv .venv and Node 24 available. Run scripts/setup_env.py once (does not overwrite an existing .env); Docker Compose supplies PostgreSQL 17 on host port 5433. Never print/commit .env.
@@ -37,7 +37,7 @@ Python 3.12 virtualenv .venv and Node 24 available. Run scripts/setup_env.py onc
 All work on main. Audit b12de60 is remote. Checkpoint commits are created through GitHub Git data API because local push transport lacks credentials; local and remote trees are compared before local ref synchronization. No feature branches or PRs.
 
 ## Last Stable Commit
-d826e68e1e3292b45375e4b3a20a2d292f8bfc07 (catalog); use git log for checkout checkpoint.
+99bfcf1f919e27296d0e36d711a0b45738196a41 (checkout); use git log for delivery checkpoint.
 
 ## How to Continue in a New Session
 Read README, this file and docs/DECISIONS.md; inspect git status, branches and recent log; pull --ff-only
