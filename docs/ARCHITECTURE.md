@@ -25,3 +25,11 @@ Polling does not grant access: all reads are server-filtered to the current role
 are never trusted; current user/activation and server session are read on every authenticated request.
 Admin is an operational role, not a way to invent invalid order transitions. Logs omit secrets and
 validation error bodies omit raw submitted inputs. The browser stores neither JWT nor password.
+
+## Implemented authentication
+
+Login uses HS256 JWT with required issuer, audience, expiry, issued-at, subject and session ID.
+Every request checks an active user and unrevoked, unexpired database session. Mutation requests
+must supply the per-session CSRF token. Logout revokes the session before returning; replay fails.
+Auth requests are throttled at 20/minute per observed client IP using a bounded in-process limiter.
+For multiple workers/instances, enforce shared rate limits at the reverse proxy as well.

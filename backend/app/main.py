@@ -72,4 +72,9 @@ def create_app(settings: Settings | None = None):
     def health():
         return {"status": "ok"}
 
+    from app.api.auth import router as auth_router
+    from app.security.limiter import AuthLimiter
+
+    app.state.auth_limiter = AuthLimiter()
+    app.include_router(auth_router, prefix="/api/v1")
     return app
