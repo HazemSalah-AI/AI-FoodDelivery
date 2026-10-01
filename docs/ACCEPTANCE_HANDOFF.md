@@ -12,7 +12,7 @@ constitute a complete security audit or production launch signoff.
 | Backend acceptance | PASS: all 26 tests on PostgreSQL 17, including three concurrency races. Tests cover session revocation, CSRF/origin, ownership/roles, driver-location privacy, repricing, snapshots, retries, stock restoration and assignment/reassignment. |
 | Database | PASS: `alembic upgrade head` and `alembic check`; revision `342305e2a522`, no drift. Existing SQLite migration lifecycle and PostgreSQL offline-SQL tests pass. |
 | Role UI | PASS: fresh TypeScript/Vite build and four Chromium tests covering customer, merchant, admin and delivery after rejection/reassignment. |
-| Remote/container evidence | PASS: [run 36921976684](https://github.com/HazemSalah-AI/AI-FoodDelivery/actions/runs/36921976684) on initial checkpoint `9cbe073` passed validate and containers, including proxy readiness/config checks. Final export refinement awaits its remote run. |
+| Remote/container evidence | PASS: [run 36923110410](https://github.com/HazemSalah-AI/AI-FoodDelivery/actions/runs/36923110410) on final source checkpoint `f6bb511` passed validate and containers, including exporter drift checks, PostgreSQL tests, browser/build and proxy readiness/config checks. |
 
 The request library and blank environment are in [api/](api/); follow [API_CLIENT.md](API_CLIENT.md)
 for import and the role sequence. It is a manual request library, not a run-all production test.

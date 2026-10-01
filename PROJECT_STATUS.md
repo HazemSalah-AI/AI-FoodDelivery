@@ -1,7 +1,8 @@
 # Project Status
 
 ## Current Phase
-API import/export and concise acceptance/handoff checkpoint complete and locally validated (2026-10-01).
+API import/export and concise acceptance/handoff checkpoint complete, published and validated locally
+and in GitHub Actions (2026-10-01). Stop after this checkpoint as requested.
 
 ## Completed Phases
 Backend phases 1–8, all four Arabic RTL role interfaces, phase 11 deployment packaging, and API
@@ -59,10 +60,9 @@ alembic upgrade/check; backend/exporter Ruff lint and format; TypeScript/Vite pr
 all 4 Chromium browser tests; OpenAPI 3.1 and official Postman v2.1 JSON schema validation; live
 /openapi.json equals the snapshot; Newman 6.2.2 sent 69 requests covering all 55 operations with
 69 passing assertions; exporter --check, intentional stale-output/invalid-example rejection, CI YAML
-and git diff --check passed. Container evidence is inherited from unchanged deployment files:
-GitHub Actions run 35771970349 on eae8735; both jobs rechecked successful. Initial checkpoint
-9cbe073 passed both jobs in run 36921976684, including the new artifact check. Final export-only
-refinement has passed local schema/exporter/Newman verification; its remote run is pending.
+and git diff --check passed. Final source checkpoint f6bb511 passed both validate and containers
+jobs in GitHub Actions run 36923110410, including exporter checks, PostgreSQL tests, browser/build,
+Docker startup, proxy readiness and Nginx/Caddy validation. Earlier checkpoint runs remain preserved.
 
 ## Environment / Setup Notes
 Python 3.12.14 virtualenv .venv, Node 24.15 and Docker are available in this worktree. Export from
@@ -73,16 +73,16 @@ credentials and a disposable PostgreSQL container, with no existing database mod
 
 ## Git / Branch Status
 Existing default branch is master. This app-created worktree started detached at 64f8d06; master
-is checked out in the primary worktree, whose files/branch were not moved. Initial checkpoint
-9cbe07358f29f910206155cb0babab9d5ffa1c2e was committed here and published to master using a
-normal non-forced local Git push; remote SHA verified. Other worktrees and main remain preserved.
-Publish the tested export-only refinement the same way; its publication/remote CI are pending.
+is checked out in the primary worktree, whose files/branch were not moved. Checkpoint commits were
+published with normal non-forced local Git pushes; remote source tip verified at
+f6bb5112f403234ad96409703f7df38495c410fc. This worktree remains detached. Other worktrees and
+main remain preserved. The following documentation-only commit records final successful CI;
+resolve that record's publication tip with git log/ls-remote.
 
 ## Last Stable Commit
-Deployment runtime baseline: eae87353f5ac7617338e801479d23bc7407ef5e0, validated in GitHub Actions
-run 35771970349. Resume baseline: 64f8d06c46e2de71d28e4d9a7823b9b452c38d0b. The following API
-handoff checkpoint 9cbe07358f29f910206155cb0babab9d5ffa1c2e passed remote run 36921976684.
-Resolve the final export refinement through git log after its publication.
+f6bb5112f403234ad96409703f7df38495c410fc — final API import/export checkpoint, validated in
+GitHub Actions run 36923110410. The following documentation-only commit records those results.
+Application/deployment runtime remains the existing eae8735 baseline; no application code changed.
 
 ## How to Continue in a New Session
 Read this file and docs/ACCEPTANCE_HANDOFF.md first. This checkpoint is complete: do not restart a
