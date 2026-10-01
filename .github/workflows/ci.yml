@@ -38,6 +38,11 @@ jobs:
       - run: pip install -r backend/requirements-dev.txt
       - run: ruff check . && ruff format --check . && alembic upgrade head && alembic check && pytest -q
         working-directory: backend
+      - name: Check API import artifacts
+        run: |
+          ruff check --config backend/pyproject.toml scripts/export_api.py
+          ruff format --check --config backend/pyproject.toml scripts/export_api.py
+          python scripts/export_api.py --check
       - run: npm ci && npm run build
         working-directory: frontend
       - run: npx playwright install --with-deps chromium

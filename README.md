@@ -37,6 +37,8 @@ uvicorn app.main:create_app --factory --reload --port 8000
 
 In another terminal: `cd frontend`, `npm ci`, `npm run dev`. Open http://localhost:5173.
 API health: http://localhost:8000/api/v1/health; Swagger: http://localhost:8000/docs.
+Importable OpenAPI/Postman artifacts and the cookie/CSRF workflow: [docs/API_CLIENT.md](docs/API_CLIENT.md).
+Acceptance evidence and remaining operator checks: [docs/ACCEPTANCE_HANDOFF.md](docs/ACCEPTANCE_HANDOFF.md).
 Run `pytest` and `ruff check .` from `backend/`; `npm run build` from `frontend/`.
 The health route is a liveness check and intentionally does not create the schema.
 Customer, merchant, driver and admin interfaces are implemented and browser-tested.
