@@ -86,6 +86,22 @@
         {
           "event": [
             {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "for (const match of pm.request.body.raw.matchAll(/\"\\{\\{(\\w+)\\}\\}\"/g)) {",
+                  "    const key = match[1];",
+                  "    const value = pm.environment.get(key);",
+                  "    if (value === undefined || value === null || value === \"\") {",
+                  "        throw new Error(\"Set \" + key + \" in the selected environment before sending.\");",
+                  "    }",
+                  "    pm.variables.set(key, JSON.stringify(String(value)).slice(1, -1));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
               "listen": "test",
               "script": {
                 "exec": [
@@ -137,7 +153,16 @@
               "listen": "prerequest",
               "script": {
                 "exec": [
-                  "[\"csrf_token\", \"current_role\", \"current_user_id\"].forEach(k => pm.environment.unset(k));"
+                  "[\"csrf_token\", \"current_role\", \"current_user_id\"].forEach(k => pm.environment.unset(k));",
+                  "",
+                  "for (const match of pm.request.body.raw.matchAll(/\"\\{\\{(\\w+)\\}\\}\"/g)) {",
+                  "    const key = match[1];",
+                  "    const value = pm.environment.get(key);",
+                  "    if (value === undefined || value === null || value === \"\") {",
+                  "        throw new Error(\"Set \" + key + \" in the selected environment before sending.\");",
+                  "    }",
+                  "    pm.variables.set(key, JSON.stringify(String(value)).slice(1, -1));",
+                  "}"
                 ],
                 "type": "text/javascript"
               }
@@ -275,6 +300,22 @@
         },
         {
           "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "for (const match of pm.request.body.raw.matchAll(/\"\\{\\{(\\w+)\\}\\}\"/g)) {",
+                  "    const key = match[1];",
+                  "    const value = pm.environment.get(key);",
+                  "    if (value === undefined || value === null || value === \"\") {",
+                  "        throw new Error(\"Set \" + key + \" in the selected environment before sending.\");",
+                  "    }",
+                  "    pm.variables.set(key, JSON.stringify(String(value)).slice(1, -1));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            },
             {
               "listen": "test",
               "script": {
@@ -455,6 +496,22 @@
         {
           "event": [
             {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "for (const match of pm.request.body.raw.matchAll(/\"\\{\\{(\\w+)\\}\\}\"/g)) {",
+                  "    const key = match[1];",
+                  "    const value = pm.environment.get(key);",
+                  "    if (value === undefined || value === null || value === \"\") {",
+                  "        throw new Error(\"Set \" + key + \" in the selected environment before sending.\");",
+                  "    }",
+                  "    pm.variables.set(key, JSON.stringify(String(value)).slice(1, -1));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
               "listen": "test",
               "script": {
                 "exec": [
@@ -578,6 +635,22 @@
         {
           "event": [
             {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "for (const match of pm.request.body.raw.matchAll(/\"\\{\\{(\\w+)\\}\\}\"/g)) {",
+                  "    const key = match[1];",
+                  "    const value = pm.environment.get(key);",
+                  "    if (value === undefined || value === null || value === \"\") {",
+                  "        throw new Error(\"Set \" + key + \" in the selected environment before sending.\");",
+                  "    }",
+                  "    pm.variables.set(key, JSON.stringify(String(value)).slice(1, -1));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
               "listen": "test",
               "script": {
                 "exec": [
@@ -629,6 +702,22 @@
         },
         {
           "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "for (const match of pm.request.body.raw.matchAll(/\"\\{\\{(\\w+)\\}\\}\"/g)) {",
+                  "    const key = match[1];",
+                  "    const value = pm.environment.get(key);",
+                  "    if (value === undefined || value === null || value === \"\") {",
+                  "        throw new Error(\"Set \" + key + \" in the selected environment before sending.\");",
+                  "    }",
+                  "    pm.variables.set(key, JSON.stringify(String(value)).slice(1, -1));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            },
             {
               "listen": "test",
               "script": {
@@ -733,6 +822,22 @@
         {
           "event": [
             {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "for (const match of pm.request.body.raw.matchAll(/\"\\{\\{(\\w+)\\}\\}\"/g)) {",
+                  "    const key = match[1];",
+                  "    const value = pm.environment.get(key);",
+                  "    if (value === undefined || value === null || value === \"\") {",
+                  "        throw new Error(\"Set \" + key + \" in the selected environment before sending.\");",
+                  "    }",
+                  "    pm.variables.set(key, JSON.stringify(String(value)).slice(1, -1));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
               "listen": "test",
               "script": {
                 "exec": [
@@ -784,6 +889,22 @@
         },
         {
           "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "for (const match of pm.request.body.raw.matchAll(/\"\\{\\{(\\w+)\\}\\}\"/g)) {",
+                  "    const key = match[1];",
+                  "    const value = pm.environment.get(key);",
+                  "    if (value === undefined || value === null || value === \"\") {",
+                  "        throw new Error(\"Set \" + key + \" in the selected environment before sending.\");",
+                  "    }",
+                  "    pm.variables.set(key, JSON.stringify(String(value)).slice(1, -1));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            },
             {
               "listen": "test",
               "script": {
@@ -882,6 +1003,22 @@
         },
         {
           "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "for (const match of pm.request.body.raw.matchAll(/\"\\{\\{(\\w+)\\}\\}\"/g)) {",
+                  "    const key = match[1];",
+                  "    const value = pm.environment.get(key);",
+                  "    if (value === undefined || value === null || value === \"\") {",
+                  "        throw new Error(\"Set \" + key + \" in the selected environment before sending.\");",
+                  "    }",
+                  "    pm.variables.set(key, JSON.stringify(String(value)).slice(1, -1));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            },
             {
               "listen": "test",
               "script": {
@@ -986,6 +1123,22 @@
         {
           "event": [
             {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "for (const match of pm.request.body.raw.matchAll(/\"\\{\\{(\\w+)\\}\\}\"/g)) {",
+                  "    const key = match[1];",
+                  "    const value = pm.environment.get(key);",
+                  "    if (value === undefined || value === null || value === \"\") {",
+                  "        throw new Error(\"Set \" + key + \" in the selected environment before sending.\");",
+                  "    }",
+                  "    pm.variables.set(key, JSON.stringify(String(value)).slice(1, -1));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
               "listen": "test",
               "script": {
                 "exec": [
@@ -1072,6 +1225,22 @@
         {
           "event": [
             {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "for (const match of pm.request.body.raw.matchAll(/\"\\{\\{(\\w+)\\}\\}\"/g)) {",
+                  "    const key = match[1];",
+                  "    const value = pm.environment.get(key);",
+                  "    if (value === undefined || value === null || value === \"\") {",
+                  "        throw new Error(\"Set \" + key + \" in the selected environment before sending.\");",
+                  "    }",
+                  "    pm.variables.set(key, JSON.stringify(String(value)).slice(1, -1));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
               "listen": "test",
               "script": {
                 "exec": [
@@ -1123,6 +1292,22 @@
         },
         {
           "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "for (const match of pm.request.body.raw.matchAll(/\"\\{\\{(\\w+)\\}\\}\"/g)) {",
+                  "    const key = match[1];",
+                  "    const value = pm.environment.get(key);",
+                  "    if (value === undefined || value === null || value === \"\") {",
+                  "        throw new Error(\"Set \" + key + \" in the selected environment before sending.\");",
+                  "    }",
+                  "    pm.variables.set(key, JSON.stringify(String(value)).slice(1, -1));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            },
             {
               "listen": "test",
               "script": {
@@ -1246,7 +1431,7 @@
                 {
                   "disabled": true,
                   "key": "role",
-                  "value": "Pending"
+                  "value": "Admin"
                 },
                 {
                   "disabled": false,
@@ -1271,6 +1456,22 @@
         },
         {
           "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "for (const match of pm.request.body.raw.matchAll(/\"\\{\\{(\\w+)\\}\\}\"/g)) {",
+                  "    const key = match[1];",
+                  "    const value = pm.environment.get(key);",
+                  "    if (value === undefined || value === null || value === \"\") {",
+                  "        throw new Error(\"Set \" + key + \" in the selected environment before sending.\");",
+                  "    }",
+                  "    pm.variables.set(key, JSON.stringify(String(value)).slice(1, -1));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            },
             {
               "listen": "test",
               "script": {
@@ -1328,6 +1529,22 @@
         {
           "event": [
             {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "for (const match of pm.request.body.raw.matchAll(/\"\\{\\{(\\w+)\\}\\}\"/g)) {",
+                  "    const key = match[1];",
+                  "    const value = pm.environment.get(key);",
+                  "    if (value === undefined || value === null || value === \"\") {",
+                  "        throw new Error(\"Set \" + key + \" in the selected environment before sending.\");",
+                  "    }",
+                  "    pm.variables.set(key, JSON.stringify(String(value)).slice(1, -1));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
               "listen": "test",
               "script": {
                 "exec": [
@@ -1380,6 +1597,22 @@
         },
         {
           "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "for (const match of pm.request.body.raw.matchAll(/\"\\{\\{(\\w+)\\}\\}\"/g)) {",
+                  "    const key = match[1];",
+                  "    const value = pm.environment.get(key);",
+                  "    if (value === undefined || value === null || value === \"\") {",
+                  "        throw new Error(\"Set \" + key + \" in the selected environment before sending.\");",
+                  "    }",
+                  "    pm.variables.set(key, JSON.stringify(String(value)).slice(1, -1));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            },
             {
               "listen": "test",
               "script": {
@@ -1520,6 +1753,22 @@
         {
           "event": [
             {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "for (const match of pm.request.body.raw.matchAll(/\"\\{\\{(\\w+)\\}\\}\"/g)) {",
+                  "    const key = match[1];",
+                  "    const value = pm.environment.get(key);",
+                  "    if (value === undefined || value === null || value === \"\") {",
+                  "        throw new Error(\"Set \" + key + \" in the selected environment before sending.\");",
+                  "    }",
+                  "    pm.variables.set(key, JSON.stringify(String(value)).slice(1, -1));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
               "listen": "test",
               "script": {
                 "exec": [
@@ -1618,6 +1867,15 @@
                 "exec": [
                   "if (!pm.environment.get(\"idempotency_key\")) {",
                   "    pm.environment.set(\"idempotency_key\", pm.variables.replaceIn(\"{{$guid}}\"));",
+                  "}",
+                  "",
+                  "for (const match of pm.request.body.raw.matchAll(/\"\\{\\{(\\w+)\\}\\}\"/g)) {",
+                  "    const key = match[1];",
+                  "    const value = pm.environment.get(key);",
+                  "    if (value === undefined || value === null || value === \"\") {",
+                  "        throw new Error(\"Set \" + key + \" in the selected environment before sending.\");",
+                  "    }",
+                  "    pm.variables.set(key, JSON.stringify(String(value)).slice(1, -1));",
                   "}"
                 ],
                 "type": "text/javascript"
@@ -1762,6 +2020,22 @@
         {
           "event": [
             {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "for (const match of pm.request.body.raw.matchAll(/\"\\{\\{(\\w+)\\}\\}\"/g)) {",
+                  "    const key = match[1];",
+                  "    const value = pm.environment.get(key);",
+                  "    if (value === undefined || value === null || value === \"\") {",
+                  "        throw new Error(\"Set \" + key + \" in the selected environment before sending.\");",
+                  "    }",
+                  "    pm.variables.set(key, JSON.stringify(String(value)).slice(1, -1));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
               "listen": "test",
               "script": {
                 "exec": [
@@ -1819,6 +2093,22 @@
       "item": [
         {
           "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "for (const match of pm.request.body.raw.matchAll(/\"\\{\\{(\\w+)\\}\\}\"/g)) {",
+                  "    const key = match[1];",
+                  "    const value = pm.environment.get(key);",
+                  "    if (value === undefined || value === null || value === \"\") {",
+                  "        throw new Error(\"Set \" + key + \" in the selected environment before sending.\");",
+                  "    }",
+                  "    pm.variables.set(key, JSON.stringify(String(value)).slice(1, -1));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            },
             {
               "listen": "test",
               "script": {
@@ -1920,6 +2210,22 @@
         {
           "event": [
             {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "for (const match of pm.request.body.raw.matchAll(/\"\\{\\{(\\w+)\\}\\}\"/g)) {",
+                  "    const key = match[1];",
+                  "    const value = pm.environment.get(key);",
+                  "    if (value === undefined || value === null || value === \"\") {",
+                  "        throw new Error(\"Set \" + key + \" in the selected environment before sending.\");",
+                  "    }",
+                  "    pm.variables.set(key, JSON.stringify(String(value)).slice(1, -1));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
               "listen": "test",
               "script": {
                 "exec": [
@@ -2007,6 +2313,22 @@
         },
         {
           "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "for (const match of pm.request.body.raw.matchAll(/\"\\{\\{(\\w+)\\}\\}\"/g)) {",
+                  "    const key = match[1];",
+                  "    const value = pm.environment.get(key);",
+                  "    if (value === undefined || value === null || value === \"\") {",
+                  "        throw new Error(\"Set \" + key + \" in the selected environment before sending.\");",
+                  "    }",
+                  "    pm.variables.set(key, JSON.stringify(String(value)).slice(1, -1));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            },
             {
               "listen": "test",
               "script": {
@@ -2098,6 +2420,22 @@
         },
         {
           "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "for (const match of pm.request.body.raw.matchAll(/\"\\{\\{(\\w+)\\}\\}\"/g)) {",
+                  "    const key = match[1];",
+                  "    const value = pm.environment.get(key);",
+                  "    if (value === undefined || value === null || value === \"\") {",
+                  "        throw new Error(\"Set \" + key + \" in the selected environment before sending.\");",
+                  "    }",
+                  "    pm.variables.set(key, JSON.stringify(String(value)).slice(1, -1));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            },
             {
               "listen": "test",
               "script": {
@@ -2393,6 +2731,22 @@
         },
         {
           "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "for (const match of pm.request.body.raw.matchAll(/\"\\{\\{(\\w+)\\}\\}\"/g)) {",
+                  "    const key = match[1];",
+                  "    const value = pm.environment.get(key);",
+                  "    if (value === undefined || value === null || value === \"\") {",
+                  "        throw new Error(\"Set \" + key + \" in the selected environment before sending.\");",
+                  "    }",
+                  "    pm.variables.set(key, JSON.stringify(String(value)).slice(1, -1));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            },
             {
               "listen": "test",
               "script": {

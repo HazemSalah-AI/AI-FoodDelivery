@@ -1,61 +1,46 @@
 # Acceptance and handoff — 2026-10-01
 
-The API import/export checkpoint is complete. The implemented MVP and its developer handoff pass
-the checks below. Production rollout still requires the operator checks listed here. This review
-covers the existing API contracts, role workflows and acceptance evidence; it is not a complete
-security audit or a production launch signoff. Backend/frontend application code and migrations
-were not changed in this checkpoint.
+The API import/export checkpoint passes the developer-handoff checks below. Backend/frontend
+application code and migrations are unchanged. This focused contract/workflow review does not
+constitute a complete security audit or production launch signoff.
 
-## Deliverables and evidence
+| Acceptance check | Result and evidence |
+|---|---|
+| API coverage and import format | PASS: all 55 runtime operations match the API docs, OpenAPI snapshot and Postman library. OpenAPI 3.1 and the official Postman v2.1 schema validate; snapshot equals live `/openapi.json`. |
+| Usable client workflow | PASS: Newman 6.2.2 sends 69 requests covering all operations with cookies, CSRF, captured IDs, checkout retry, role switches and delivery. Rerun also verifies template credentials containing quotes/backslashes and the optional role filter. |
+| Export maintenance | PASS: exporter `--check`, Ruff lint/format and intentional stale-output/invalid-example rejection. CI checks artifact/doc drift. Export requires neither `.env` nor database connectivity. |
+| Backend acceptance | PASS: all 26 tests on PostgreSQL 17, including three concurrency races. Tests cover session revocation, CSRF/origin, ownership/roles, driver-location privacy, repricing, snapshots, retries, stock restoration and assignment/reassignment. |
+| Database | PASS: `alembic upgrade head` and `alembic check`; revision `342305e2a522`, no drift. Existing SQLite migration lifecycle and PostgreSQL offline-SQL tests pass. |
+| Role UI | PASS: fresh TypeScript/Vite build and four Chromium tests covering customer, merchant, admin and delivery after rejection/reassignment. |
+| Remote/container evidence | PASS: [run 36921976684](https://github.com/HazemSalah-AI/AI-FoodDelivery/actions/runs/36921976684) on initial checkpoint `9cbe073` passed validate and containers, including proxy readiness/config checks. Final export refinement awaits its remote run. |
 
-| Area | Result | Evidence |
-|---|---|---|
-| API coverage/import format | PASS | All 55 runtime method/path operations match `API_DESIGN.md`, the OpenAPI snapshot and Postman request library. OpenAPI 3.1 and the official Postman v2.1 JSON schema validate. Exported schema equals the disposable server's `/openapi.json`. |
-| Practical client workflow | PASS | Newman 6.2.2 sends 69 selected requests covering every operation with cookies, CSRF, captured IDs, checkout retry, role switches, preparation, assignment, pickup/delivery, reviews and logout on disposable PostgreSQL 17. The saved library is not a run-all acceptance suite. |
-| Export maintenance | PASS | `python scripts/export_api.py --check`; Ruff lint/format. Deliberately stale output and an invalid quantity example are rejected. CI now checks exporter lint/format and artifact/doc drift. Export does not load `.env` or connect to a database. |
-| Authentication/ownership/privacy | PASS within tested cases | Existing auth/catalog/delivery tests cover privileged-registration rejection, session revocation/suspension, CSRF/origin, rate limiting, role separation, ownership, recipient filtering and admin-only driver-location reads. |
-| Order/assignment integrity | PASS within tested cases | All 26 backend tests pass on isolated PostgreSQL 17, including three real row-lock races: checkout stock, accept versus cancel, and driver reservation. Repricing, snapshots, idempotency, stock restoration, transitions and reassignment are covered. |
-| Database migration | PASS | `alembic upgrade head` and `alembic check` on disposable PostgreSQL 17; revision `342305e2a522`, no schema drift. Existing migration tests also exercise SQLite upgrade/check/downgrade and PostgreSQL offline SQL. |
-| Role UI handoff | PASS within tested cases | Fresh TypeScript/Vite production build and all four Chromium tests pass: customer checkout/cancel, merchant management, admin account/area management, and delivery after rejection/reassignment with location privacy. |
-| Container packaging | PASS, inherited evidence | Unchanged container/deployment files were validated in [GitHub Actions run 35771970349](https://github.com/HazemSalah-AI/AI-FoodDelivery/actions/runs/35771970349) on `eae8735`; both validate and containers jobs were rechecked as successful. No live hosting was created. |
+The request library and blank environment are in [api/](api/); follow [API_CLIENT.md](API_CLIENT.md)
+for import and the role sequence. It is a manual request library, not a run-all production test.
+Always re-login when changing roles. Keep a checkout key across retries; clear it for a new order.
 
-## Contract clarifications
+The API docs now use runtime `{identity}` parameters and explain full-model PATCH/default resets,
+decimal coordinates and availability heartbeat refresh. The raw schema still omits cookie/CSRF
+security declarations, most domain errors and readiness 503; its automatic 422 schema differs from
+the custom error envelope. Health/readiness/location-update responses are untyped. Companion docs
+and scripts supply the workflow; a future contract-only checkpoint can improve runtime metadata.
+`/openapi.json` and `/docs` are backend-only URLs; use the snapshot for web-proxy clients.
 
-- The runtime uses `{identity}` for path parameters. The collection substitutes resource-specific
-  variables, including `product_id` for cart items and `merchant_id` for favorites.
-- PATCH requires each input model's required fields and resets omitted defaulted fields. Request
-  examples and API docs now state this behavior. Availability writes refresh the driver heartbeat.
-- The raw schema omits cookie/CSRF security declarations, most domain errors and readiness 503.
-  Its generated 422 schema differs from the custom `{error: ...}` response, and health/readiness/
-  location-update responses are untyped. The snapshot intentionally preserves the runtime schema;
-  companion docs and the Postman scripts supply usable guidance. A future contract-only checkpoint
-  can add accurate runtime OpenAPI metadata/response models and regressions for those declarations.
-- `/openapi.json` and `/docs` are available on the backend, while the web proxy forwards `/api/`.
-  Use the checked-in export for proxy clients. Cookie identities are shared by hostname; re-login
-  for each role switch. Preserve a checkout key across retries and clear it for a new order.
+Remaining operator checks:
 
-## Remaining limits and operator handoff
+1. Separately authorize hosting/domain work; provision fresh secrets, HTTPS/secure cookies and an
+   admin; run [DEPLOYMENT.md](DEPLOYMENT.md)'s device/role smoke flow. No live hosting, DNS or paid
+   resources were created.
+2. Configure monitoring/encrypted backups and prove restoration. No high-availability or capacity
+   evidence exists. `/ready` checks connectivity and a nonempty revision, not schema/head equality;
+   explicit migration/drift checks remain necessary.
+3. Verify physical-device GPS, background behavior, live HTTPS permissions and other browsers.
+   Chromium used simulated location. The admin map sends selected coordinates to OpenStreetMap;
+   notifications use in-site polling, with no external delivery.
+4. Postman desktop import was not separately exercised; format validation and Newman execution
+   verify the artifacts/scripts. Other importers need manual cookie/CSRF setup. Share only blank
+   templates, never credentials, cookie jars or real response data.
 
-1. Before real customer use: separately authorize hosting/domain work, provision a server and fresh
-   secrets, enable HTTPS/secure cookies, bootstrap an admin, and perform the deployment smoke flow
-   in [DEPLOYMENT.md](DEPLOYMENT.md). No hosting, DNS changes or paid resources are authorized here.
-2. Configure monitoring and encrypted backups, then prove restoration in an isolated target. This
-   single-host MVP has no demonstrated high availability or load/capacity results. `/ready` verifies
-   connectivity and a nonempty Alembic revision, not that the running schema is exactly at head;
-   explicit migration and drift checks remain necessary during rollout.
-3. Browser evidence is Chromium with simulated location permission. Physical-device GPS, background
-   behavior, Safari/Firefox and live HTTPS location permissions need operator verification. The admin
-   map sends selected coordinates to OpenStreetMap and depends on its availability. No external
-   message delivery is implemented; notifications are in-site polling.
-4. Postman desktop UI import was not separately exercised; official schema validation and actual
-   Newman execution verify the files/runtime scripts. Importers other than Postman need their own
-   cookie/CSRF setup. Never share populated credential/token exports or real response data.
-
-Cash on Delivery, zero delivery fee, one merchant per cart and COD totals distinct from earnings
-remain the documented scope. Legacy `DataBase/` SQL is reference only. Existing test-client and
-Newman/Node deprecation warnings are non-failing. The first local pytest attempt failed on Windows
-shared-temp permissions before fixture setup; a fresh task-owned `--basetemp` resolved it.
-
-Resume from [PROJECT_STATUS.md](../PROJECT_STATUS.md). Do not reopen completed features; select the
-next separately authorized checkpoint from the limits above. Routine API additions must regenerate
-the artifacts and pass `--check` before handoff.
+COD-only payment, zero delivery fee, one-merchant carts and COD totals distinct from earnings remain
+the documented scope. Legacy SQL remains reference only. Non-failing dependency warnings and the
+resolved Windows pytest temporary-directory issue are recorded in [PROJECT_STATUS.md](../PROJECT_STATUS.md).
+Resume there and select only the next separately authorized checkpoint.

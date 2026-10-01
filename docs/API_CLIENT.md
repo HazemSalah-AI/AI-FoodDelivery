@@ -38,6 +38,8 @@ Postman documentation: [import](https://learning.postman.com/docs/getting-starte
 This is a library to send selected requests manually, not a collection to **Run all** against a live
 database. IDs are deliberately blank; use the resource IDs returned by your own development database.
 Numeric ID placeholders in raw bodies are unquoted so that substitution sends JSON numbers.
+Pre-request scripts JSON-escape environment string values, including passwords containing quotes
+or backslashes; enter the original value in the environment without manually escaping it.
 
 | Step | Account | Requests and variables |
 |---|---|---|

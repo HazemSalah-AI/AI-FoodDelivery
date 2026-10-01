@@ -195,7 +195,15 @@ def item(method, full_path, operation, route):
         value = schema.get("default")
         disabled = value is None
         if disabled:
-            value = "{{" + param["name"] + "}}" if param["name"].endswith("_id") else "Pending"
+            choices = next(
+                (part["enum"] for part in schema.get("anyOf", [schema]) if "enum" in part), []
+            )
+            if param["name"].endswith("_id"):
+                value = "{{" + param["name"] + "}}"
+            elif choices:
+                value = choices[0]
+            else:
+                raise ValueError(f"Review query example for {method} {path}: {param['name']}")
         elif isinstance(value, bool):
             value = str(value).lower()
         queries.append({"key": param["name"], "value": str(value), "disabled": disabled})
@@ -261,29 +269,32 @@ if (pm.response.code === 201 && pm.response.json().role === "Driver") {
     pm.environment.set("driver_id", pm.response.json().id);
 }
 """
-    events = [event("test", test)]
+    pre_request = ""
     if path == "/auth/login":
-        events.insert(
-            0,
-            event(
-                "prerequest",
-                """
+        pre_request = """
 ["csrf_token", "current_role", "current_user_id"].forEach(k => pm.environment.unset(k));
-""".strip(),
-            ),
-        )
+"""
     elif path == "/checkout":
-        events.insert(
-            0,
-            event(
-                "prerequest",
-                """
+        pre_request = """
 if (!pm.environment.get("idempotency_key")) {
     pm.environment.set("idempotency_key", pm.variables.replaceIn("{{$guid}}"));
 }
-""".strip(),
-            ),
-        )
+"""
+    if "body" in request:
+        # Read raw environment values each time: local overrides must not be escaped twice.
+        pre_request += r"""
+for (const match of pm.request.body.raw.matchAll(/"\{\{(\w+)\}\}"/g)) {
+    const key = match[1];
+    const value = pm.environment.get(key);
+    if (value === undefined || value === null || value === "") {
+        throw new Error("Set " + key + " in the selected environment before sending.");
+    }
+    pm.variables.set(key, JSON.stringify(String(value)).slice(1, -1));
+}
+"""
+    events = [event("test", test)]
+    if pre_request:
+        events.insert(0, event("prerequest", pre_request.strip()))
     return {
         "name": f"{method} {path}",
         "request": request,

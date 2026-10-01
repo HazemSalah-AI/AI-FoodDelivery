@@ -22,6 +22,8 @@ Corrected API docs for runtime path parameter names, full-model PATCH inputs, de
 origin validation and availability heartbeat behavior. Documented generated OpenAPI security/error/
 untyped-response gaps and backend-only /openapi.json and /docs URLs. Completed the focused handoff
 review and reran existing backend/browser acceptance checks plus all-operation Newman verification.
+Final export refinement derives optional filter values from schema enums and safely JSON-escapes
+credential strings; the client rerun passed with quotes/backslashes and the optional role filter.
 
 ## Next Task
 This requested checkpoint is complete. Await a separately authorized next checkpoint. Before real
@@ -58,7 +60,9 @@ all 4 Chromium browser tests; OpenAPI 3.1 and official Postman v2.1 JSON schema 
 /openapi.json equals the snapshot; Newman 6.2.2 sent 69 requests covering all 55 operations with
 69 passing assertions; exporter --check, intentional stale-output/invalid-example rejection, CI YAML
 and git diff --check passed. Container evidence is inherited from unchanged deployment files:
-GitHub Actions run 35771970349 on eae8735; both jobs rechecked successful. New remote CI not yet run.
+GitHub Actions run 35771970349 on eae8735; both jobs rechecked successful. Initial checkpoint
+9cbe073 passed both jobs in run 36921976684, including the new artifact check. Final export-only
+refinement has passed local schema/exporter/Newman verification; its remote run is pending.
 
 ## Environment / Setup Notes
 Python 3.12.14 virtualenv .venv, Node 24.15 and Docker are available in this worktree. Export from
@@ -68,16 +72,17 @@ README.md: run scripts/setup_env.py once; never print/commit .env. Tests used is
 credentials and a disposable PostgreSQL container, with no existing database modified.
 
 ## Git / Branch Status
-Existing default branch is master, verified with git ls-remote --symref origin HEAD at 64f8d06.
-This app-created worktree started detached at that same commit; master is checked out in the primary
-worktree, whose files/branch will not be moved here. A non-forced push dry run now succeeds through
-local Git. Commit this focused checkpoint in the current worktree and publish HEAD:master, rechecking
-the remote tip first. Other worktrees and main remain preserved. Publication confirmation pending.
+Existing default branch is master. This app-created worktree started detached at 64f8d06; master
+is checked out in the primary worktree, whose files/branch were not moved. Initial checkpoint
+9cbe07358f29f910206155cb0babab9d5ffa1c2e was committed here and published to master using a
+normal non-forced local Git push; remote SHA verified. Other worktrees and main remain preserved.
+Publish the tested export-only refinement the same way; its publication/remote CI are pending.
 
 ## Last Stable Commit
 Deployment runtime baseline: eae87353f5ac7617338e801479d23bc7407ef5e0, validated in GitHub Actions
 run 35771970349. Resume baseline: 64f8d06c46e2de71d28e4d9a7823b9b452c38d0b. The following API
-handoff checkpoint records fresh local verification; use git log to resolve its commit after creation.
+handoff checkpoint 9cbe07358f29f910206155cb0babab9d5ffa1c2e passed remote run 36921976684.
+Resolve the final export refinement through git log after its publication.
 
 ## How to Continue in a New Session
 Read this file and docs/ACCEPTANCE_HANDOFF.md first. This checkpoint is complete: do not restart a
